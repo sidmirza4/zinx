@@ -1,16 +1,15 @@
-import { useState, useEffect } from "react";
 import { BsFillSunFill, BsFillMoonFill } from "react-icons/bs";
+import { useAppContext } from "../context/AppContext";
 
-export const ThemeButton: React.FC<{
-  onClick: () => void;
-  darkMode?: boolean;
-}> = ({ onClick, darkMode }) => {
+export const ThemeButton: React.FC = () => {
+  const { toggleDarkMode, darkMode } = useAppContext();
+
   return (
-    <button onClick={onClick}>
+    <button onClick={toggleDarkMode}>
       {darkMode ? (
-        <BsFillSunFill fontSize="1.6rem" />
+        <BsFillSunFill fontSize="1.4rem" />
       ) : (
-        <BsFillMoonFill fontSize="1.6rem" />
+        <BsFillMoonFill fontSize="1.4rem" />
       )}
     </button>
   );

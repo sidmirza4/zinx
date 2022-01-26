@@ -1,37 +1,14 @@
-import { useState, useEffect } from "react";
+import Link from "next/link";
 
-import { ThemeButton } from ".";
+import { ThemeButton, Button } from ".";
+import { useAppContext } from "../context/AppContext";
+import ConnectedChip from "./ConnectedChip";
 
 export const Navbar = () => {
-  const [darkMode, setDarkMode] = useState<boolean | undefined>(undefined);
-
-  // setting the dark mode if already available in localstorage
-  useEffect(() => {
-    const theme = localStorage.getItem("theme");
-    if (theme && theme === "dark") {
-      window.document.documentElement.classList.add("dark");
-      setDarkMode(true);
-    }
-  }, []);
-
-  // toggling the darkmode
-  useEffect(() => {
-    if (darkMode) {
-      window.document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      window.document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [darkMode]);
-
-  // toggling the darkmode
-  const onClick = () => {
-    setDarkMode(!darkMode);
-  };
+  const { darkMode, walletConnected } = useAppContext();
 
   return (
-    <nav className="dark:bg-blue bg-white shadow-xl md:p-5 p-4">
+    <nav className="dark:bg-blue bg-white shadow-lg md:p-5 p-4">
       <ul className="flex justify-between items-center">
         <li className="flex items-center">
           <img
@@ -42,10 +19,20 @@ export const Navbar = () => {
           <p className="ml-2 text-2xl font-bold tracking-wider">Zinx</p>
         </li>
         <div className="flex">
-          <li className="mr-4">All Photos</li>
-          <li className="mr-4">Connect Wallet</li>
-          <li>
-            <ThemeButton onClick={onClick} darkMode={darkMode} />
+          <li className="mr-4 font-semibold self-center">
+            <Link href="/">All Photos</Link>
+          </li>
+          <li className="mr-6 self-center">
+            {walletConnected ? (
+              <ConnectedChip />
+            ) : (
+              <Button size="sm" disableElevation white={darkMode}>
+                Connect Wallet
+              </Button>
+            )}
+          </li>
+          <li className="mt-1 self-center">
+            <ThemeButton />
           </li>
         </div>
       </ul>

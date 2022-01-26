@@ -3,6 +3,7 @@ import Head from "next/head";
 
 import { Navbar } from "../components";
 import { Button } from "../components";
+import ConnectedChip from "../components/ConnectedChip";
 
 const Home: NextPage = () => {
   return (
@@ -22,9 +23,6 @@ const Home: NextPage = () => {
         />
       </Head>
       <Navbar />
-      <div className="p-64">
-        <Button outlined>Get Started!</Button>
-      </div>
     </div>
   );
 };
