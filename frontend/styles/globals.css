@@ -6,8 +6,9 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  @apply dark:bg-darkBlue;
 }
 
 a {
@@ -15,6 +16,12 @@ a {
   text-decoration: none;
 }
 
+button {
+  color: inherit;
+}
+
 * {
   box-sizing: border-box;
+  transition: all 0.3s ease-in-out;
+  @apply dark:text-white text-darkBlue;
 }
