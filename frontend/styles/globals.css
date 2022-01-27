@@ -16,10 +16,6 @@ a {
   text-decoration: none;
 }
 
-button {
-  color: inherit;
-}
-
 * {
   box-sizing: border-box;
   transition: all 0.3s ease-in-out;

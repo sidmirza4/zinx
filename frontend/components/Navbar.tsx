@@ -8,8 +8,9 @@ export const Navbar = () => {
   const { darkMode, walletConnected } = useAppContext();
 
   return (
-    <nav className="dark:bg-blue bg-white shadow-lg md:p-5 p-4">
+    <nav className="dark:bg-blue bg-white shadow-lg md:p-5 md:px-10 p-4">
       <ul className="flex justify-between items-center">
+        {/* LOGO */}
         <li className="flex items-center">
           <img
             className="h-8"
@@ -18,11 +19,12 @@ export const Navbar = () => {
           />
           <p className="ml-2 text-2xl font-bold tracking-wider">Zinx</p>
         </li>
-        <div className="flex">
-          <li className="mr-4 font-semibold self-center">
+
+        <li className="flex">
+          <li className="hover:underline md:mr-10 mr-4 font-semibold self-center">
             <Link href="/">All Photos</Link>
           </li>
-          <li className="mr-6 self-center">
+          <li className="md:mr-10 mr-6 self-center">
             {walletConnected ? (
               <ConnectedChip />
             ) : (
@@ -34,7 +36,7 @@ export const Navbar = () => {
           <li className="mt-1 self-center">
             <ThemeButton />
           </li>
-        </div>
+        </li>
       </ul>
     </nav>
   );
