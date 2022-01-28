@@ -1,25 +1,38 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// When running the script with `npx hardhat run <script>` you'll find the Hardhat
-// Runtime Environment's members available in the global scope.
-import { ethers } from "hardhat";
+import path from "path";
+import { ethers, artifacts } from "hardhat";
+import { Contract } from "ethers";
 
 async function main() {
-  // Hardhat always runs the compile task when running scripts with its command
-  // line interface.
-  //
-  // If this script is run directly using `node` you may want to call compile
-  // manually to make sure everything is compiled
-  // await hre.run('compile');
-
   // We get the contract to deploy
-  const Greeter = await ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+  const Zinx = await ethers.getContractFactory("Zinx");
+  const zinx = await Zinx.deploy();
 
-  await greeter.deployed();
+  await zinx.deployed();
 
-  console.log("Greeter deployed to:", greeter.address);
+  console.log("Zinx deployed to:", zinx.address);
+  // save front-end files
+  saveFrontendFiles(zinx);
+}
+
+function saveFrontendFiles(zinx: Contract) {
+  const fs = require("fs");
+  const contractsDir = path.join(__dirname, "..", "frontend", "contracts");
+
+  if (!fs.existsSync(contractsDir)) {
+    fs.mkdirSync(contractsDir);
+  }
+
+  fs.writeFileSync(
+    contractsDir + "/contract-address.json",
+    JSON.stringify({ Zinx: zinx.address }, undefined, 2)
+  );
+
+  const ZinxArtifact = artifacts.readArtifactSync("Zinx");
+
+  fs.writeFileSync(
+    contractsDir + "/Zinx.json",
+    JSON.stringify(ZinxArtifact, null, 2)
+  );
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -20,7 +20,7 @@ export const Navbar = () => {
           <p className="ml-2 text-2xl font-bold tracking-wider">Zinx</p>
         </li>
 
-        <li className="flex">
+        <div className="flex">
           <li className="hover:underline md:mr-10 mr-4 font-semibold self-center">
             <Link href="/">All Photos</Link>
           </li>
@@ -36,7 +36,7 @@ export const Navbar = () => {
           <li className="mt-1 self-center">
             <ThemeButton />
           </li>
-        </li>
+        </div>
       </ul>
     </nav>
   );
