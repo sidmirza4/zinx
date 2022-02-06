@@ -5,7 +5,7 @@ export const ThemeButton: React.FC = () => {
   const { toggleDarkMode, darkMode } = useAppContext();
 
   return (
-    <button onClick={toggleDarkMode}>
+    <button className="text-white" onClick={toggleDarkMode}>
       {darkMode ? (
         <BsFillSunFill fontSize="1.4rem" />
       ) : (
