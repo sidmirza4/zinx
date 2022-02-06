@@ -1,25 +1,21 @@
-import Head from "next/head";
-import { Navbar } from ".";
+import { motion } from "framer-motion";
+
+const variants = {
+  hidden: { opacity: 0, x: 0, y: 0 },
+  enter: { opacity: 1, x: 0, y: 0 },
+  exit: { opacity: 0, x: 0, y: 0 },
+};
 
 export const Layout: React.FC = (props) => {
   return (
-    <>
-      <Head>
-        <title>Zinx</title>
-        <meta
-          name="description"
-          content="Ultimate platform to share you talent via art."
-        />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-      <Navbar />
+    <motion.main
+      variants={variants}
+      initial="hidden"
+      animate="enter"
+      exit="exit"
+      transition={{ type: "linear" }}
+    >
       {props.children}
-    </>
+    </motion.main>
   );
 };

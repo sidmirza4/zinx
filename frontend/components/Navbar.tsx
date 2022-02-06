@@ -11,19 +11,23 @@ export const Navbar = () => {
     <nav className="bg-blue shadow-lg md:p-5 md:px-10 p-4">
       <ul className="flex justify-between items-center">
         {/* LOGO */}
-        <li className="flex items-center">
-          <img className="h-8" src={`/logo-dark.svg`} alt="Zinx Logo" />
-          <p className="ml-2 text-2xl font-bold tracking-wider text-white">
-            Zinx
-          </p>
-        </li>
+        <Link href="/">
+          <li className="flex items-center cursor-pointer">
+            <>
+              <img className="h-8" src={`/logo-dark.svg`} alt="Zinx Logo" />
+              <p className="ml-2 text-2xl font-bold tracking-wider text-white">
+                Zinx
+              </p>
+            </>
+          </li>
+        </Link>
 
         <div className="flex">
           <li className="hover:underline md:mr-10 mr-4 font-semibold self-center text-white">
             <Link href="/">All Photos</Link>
           </li>
           <li className="hover:underline md:mr-10 mr-4 font-semibold self-center text-white">
-            <Link href="/">Upload Photo</Link>
+            <Link href="/upload">Upload Photo</Link>
           </li>
           <li className="md:mr-10 mr-6 self-center">
             {selectedAccount ? (
