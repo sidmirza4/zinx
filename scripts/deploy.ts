@@ -3,6 +3,12 @@ import { ethers, artifacts } from "hardhat";
 import { Contract } from "ethers";
 
 async function main() {
+  const [deployer] = await ethers.getSigners();
+
+  console.log("Deploying contracts with the account:", deployer.address);
+
+  console.log("Account balance:", (await deployer.getBalance()).toString());
+
   // We get the contract to deploy
   const Zinx = await ethers.getContractFactory("Zinx");
   const zinx = await Zinx.deploy();

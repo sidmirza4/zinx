@@ -12,6 +12,8 @@ declare global {
 }
 
 interface IAppContext {
+  allPhotos: any[];
+  zinx: Contract | null;
   connectWallet: () => void;
   modals: { noMetaMask: boolean };
   setModals: any;
@@ -21,6 +23,8 @@ interface IAppContext {
 }
 
 const AppContext = createContext<IAppContext>({
+  allPhotos: [],
+  zinx: null,
   connectWallet: () => {},
   setModals: () => {},
   modals: { noMetaMask: false },
@@ -29,6 +33,7 @@ const AppContext = createContext<IAppContext>({
 });
 
 const AppContextProvider: React.FC = (props) => {
+  const [allPhotos, setAllPhotos] = useState<any>([]);
   const [zinx, setZinx] = useState<Contract | null>(null);
   const [modals, setModals] = useState({
     noMetaMask: false,
@@ -50,6 +55,26 @@ const AppContextProvider: React.FC = (props) => {
     setZinx(_zinx);
   };
 
+  console.log(allPhotos);
+
+  // get all photos
+  const _getAllPhotos = async () => {
+    if (!zinx) return;
+    let photoCount = 0;
+    const photos = [];
+
+    try {
+      photoCount = await zinx.photoCount().call();
+      for (let i = 1; i < photoCount; i++) {
+        const photo = await zinx.photos(i);
+        photos.push(photo);
+      }
+      setAllPhotos(photos);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // initialize app
   useEffect(() => {
     if (window.ethereum) {
@@ -63,7 +88,14 @@ const AppContextProvider: React.FC = (props) => {
     }
 
     _setTheme();
+    // _getAllPhotos();
+    getOnePhoto();
   }, []);
+
+  const getOnePhoto = async () => {
+    const photo = await zinx!.photos(1);
+    console.log(photo);
+  };
 
   // toggling the darkmode
   useEffect(() => {
@@ -109,6 +141,8 @@ const AppContextProvider: React.FC = (props) => {
   };
 
   const value = {
+    allPhotos,
+    zinx,
     connectWallet,
     modals,
     setModals,

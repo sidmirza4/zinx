@@ -7,10 +7,18 @@ export const Button: React.FC<{
   onClick?: () => void;
   outlined?: boolean;
   white?: boolean;
+  disabled?: boolean;
   disableElevation?: boolean;
   size?: "sm" | "md" | "lg";
 }> = (props) => {
-  const { outlined, white, disableElevation, size, type = "button" } = props;
+  const {
+    outlined,
+    white,
+    disableElevation,
+    size,
+    type = "button",
+    disabled = false,
+  } = props;
 
   const className = classnames(
     "text-white font-medium bg-blue p-2 px-4 rounded-lg shadow-md hover:-translate-y-0.5 hover:shadow-lg active:shadow-none active:translate-y-0",
@@ -21,7 +29,12 @@ export const Button: React.FC<{
   );
 
   return (
-    <button onClick={props.onClick} className={`${className}`} type={type}>
+    <button
+      onClick={props.onClick}
+      className={`${className}`}
+      type={type}
+      disabled={disabled}
+    >
       {props.children}
     </button>
   );
