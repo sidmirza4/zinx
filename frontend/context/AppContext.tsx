@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { Contract, ethers } from "ethers";
+import { Contract, ethers, BigNumber } from "ethers";
 
 import contractAddress from "../contracts/contract-address.json";
 import ZinxArtifact from "../contracts/Zinx.json";
@@ -53,23 +53,36 @@ const AppContextProvider: React.FC = (props) => {
     );
 
     setZinx(_zinx);
+
+    await _getAllPhotos(_zinx);
   };
 
-  console.log(allPhotos);
-
   // get all photos
-  const _getAllPhotos = async () => {
-    if (!zinx) return;
-    let photoCount = 0;
+  const _getAllPhotos = async (zinx: Contract) => {
     const photos = [];
 
     try {
-      photoCount = await zinx.photoCount().call();
+      const _photoCount = await zinx.photoCount();
+      const photoCount = parseInt(_photoCount._hex);
+
+      // get all the photos from contract
       for (let i = 1; i < photoCount; i++) {
         const photo = await zinx.photos(i);
         photos.push(photo);
       }
-      setAllPhotos(photos);
+
+      // structure those photos according to the front-end
+      const structuredPhotos = photos.map((p: any) => {
+        return {
+          authorAddress: p.author,
+          authorName: p.authorName,
+          description: p.description,
+          photoHash: p.photoHash,
+          totalDonation: parseFloat(p.totalDonation._hex),
+        };
+      });
+
+      setAllPhotos(structuredPhotos);
     } catch (err) {
       console.log(err);
     }
@@ -88,14 +101,7 @@ const AppContextProvider: React.FC = (props) => {
     }
 
     _setTheme();
-    // _getAllPhotos();
-    getOnePhoto();
   }, []);
-
-  const getOnePhoto = async () => {
-    const photo = await zinx!.photos(1);
-    console.log(photo);
-  };
 
   // toggling the darkmode
   useEffect(() => {

@@ -1,12 +1,15 @@
 import React from "react";
 
 import classnames from "classnames";
+import Link from "next/link";
 
 export const Button: React.FC<{
   type?: "button" | "submit" | "reset";
   onClick?: () => void;
   outlined?: boolean;
   white?: boolean;
+  component?: Element;
+  href?: string;
   disabled?: boolean;
   disableElevation?: boolean;
   size?: "sm" | "md" | "lg";
@@ -16,6 +19,7 @@ export const Button: React.FC<{
     white,
     disableElevation,
     size,
+    href,
     type = "button",
     disabled = false,
   } = props;
@@ -35,7 +39,7 @@ export const Button: React.FC<{
       type={type}
       disabled={disabled}
     >
-      {props.children}
+      {href ? <Link href={href}>{props.children}</Link> : props.children}
     </button>
   );
 };
