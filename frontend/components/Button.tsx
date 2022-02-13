@@ -29,7 +29,8 @@ export const Button: React.FC<{
     { ["bg-white dark:text-darkBlue color-darkBlue text-darkBlue"]: white },
     { ["bg-transparent text-blue border-2 border-blue"]: outlined },
     { "shadow-none hover:shadow-none": disableElevation },
-    { "p-1.5 px-3 text-sm": size === "sm" }
+    { "p-1.5 px-3 text-sm": size === "sm" },
+    { "cursor-not-allowed hover:translate-y-0 bg-gray-500": disabled }
   );
 
   return (

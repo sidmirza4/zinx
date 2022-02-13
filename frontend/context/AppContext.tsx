@@ -53,8 +53,6 @@ const AppContextProvider: React.FC = (props) => {
     );
 
     setZinx(_zinx);
-
-    await _getAllPhotos(_zinx);
   };
 
   // get all photos
@@ -66,13 +64,13 @@ const AppContextProvider: React.FC = (props) => {
       const photoCount = parseInt(_photoCount._hex);
 
       // get all the photos from contract
-      for (let i = 1; i < photoCount; i++) {
+      for (let i = 1; i <= photoCount; i++) {
         const photo = await zinx.photos(i);
         photos.push(photo);
       }
 
       // structure those photos according to the front-end
-      const structuredPhotos = photos.map((p: any) => {
+      const structuredPhotos = photos.reverse().map((p: any) => {
         return {
           authorAddress: p.author,
           authorName: p.authorName,
@@ -87,6 +85,13 @@ const AppContextProvider: React.FC = (props) => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    setInterval(() => {
+      if (!zinx) return;
+      _getAllPhotos(zinx);
+    }, 10000);
+  }, [zinx]);
 
   // initialize app
   useEffect(() => {

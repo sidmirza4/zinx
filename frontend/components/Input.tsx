@@ -4,6 +4,7 @@ import { useField } from "formik";
 export const Input: React.FC<{
   id?: string;
   label: string;
+  disabled?: boolean;
   name: string;
   placeholder: string;
 }> = ({ label, ...props }) => {

@@ -7,6 +7,7 @@ import { Input, Button } from ".";
 import ipfs from "../ipfs";
 import { toast } from "react-toastify";
 import { useAppContext } from "../context/AppContext";
+import { useRouter } from "next/router";
 
 const FILE_SIZE = 10485760;
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
@@ -43,6 +44,7 @@ const initialValues: IFormValues = {
 
 export const UploadPhotoForm = () => {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const { zinx } = useAppContext();
 
   const [file, setFile] = useState<string | null>(null);
@@ -69,9 +71,22 @@ export const UploadPhotoForm = () => {
       }
 
       // upload photo on contract
-      await zinx?.uploadPhoto(content.hash, values.name, values.description);
+      try {
+        await zinx?.uploadPhoto(content.hash, values.name, values.description);
+        setTimeout(() => {
+          setLoading(false);
+          toast.success(<p>Photo uploaded successfully</p>);
+          router.replace("/");
+        }, 25000);
+      } catch (error: any) {
+        if (error.code === 4001) {
+          toast.error(
+            <p className="dark:text-darkBlue">You declined the request!</p>
+          );
+        }
+        setLoading(false);
+      }
     };
-    setLoading(false);
   };
 
   return (
@@ -84,6 +99,7 @@ export const UploadPhotoForm = () => {
         <Form className="flex flex-col mt-4">
           <div className="mb-6">
             <Input
+              disabled={loading}
               name="name"
               placeholder="Enter your name"
               label="Full Name*"
@@ -92,6 +108,7 @@ export const UploadPhotoForm = () => {
 
           <div className="mb-6">
             <Input
+              disabled={loading}
               name="description"
               placeholder="Write a short description"
               label="Description"
@@ -157,7 +174,15 @@ export const UploadPhotoForm = () => {
               <img src={file} alt="uploaded image" />
             </motion.div>
           )}
-          <Button type="submit">{loading ? "Loading..." : "Upload"}</Button>
+          {loading ? (
+            <div className="flex items-center justify-center ">
+              <div className="w-16 h-16 border-b-2 dark:border-white border-darkBlue rounded-full animate-spin"></div>
+            </div>
+          ) : (
+            <Button disabled={loading} type="submit">
+              Upload
+            </Button>
+          )}
         </Form>
       )}
     </Formik>
