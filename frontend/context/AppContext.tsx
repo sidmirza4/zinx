@@ -15,7 +15,7 @@ interface IAppContext {
   allPhotos: any[];
   zinx: Contract | null;
   connectWallet: () => void;
-  modals: { noMetaMask: boolean };
+  modals: { noMetaMask: boolean; donateModal: boolean };
   setModals: any;
   selectedAccount: string | null;
   darkMode?: boolean;
@@ -27,7 +27,7 @@ const AppContext = createContext<IAppContext>({
   zinx: null,
   connectWallet: () => {},
   setModals: () => {},
-  modals: { noMetaMask: false },
+  modals: { noMetaMask: false, donateModal: false },
   selectedAccount: null,
   toggleDarkMode: () => {},
 });
@@ -37,7 +37,7 @@ const AppContextProvider: React.FC = (props) => {
   const [zinx, setZinx] = useState<Contract | null>(null);
   const [modals, setModals] = useState({
     noMetaMask: false,
-    uploadPhotoModal: false,
+    donateModal: false,
   });
   const [selectedAccount, setSelectedAccount] = useState<string | null>(null);
   const [darkMode, setDarkMode] = useState<boolean | undefined>(undefined);
@@ -87,10 +87,8 @@ const AppContextProvider: React.FC = (props) => {
   };
 
   useEffect(() => {
-    setInterval(() => {
-      if (!zinx) return;
-      _getAllPhotos(zinx);
-    }, 10000);
+    if (!zinx) return;
+    _getAllPhotos(zinx);
   }, [zinx]);
 
   // initialize app

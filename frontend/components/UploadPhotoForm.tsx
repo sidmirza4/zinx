@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { motion } from "framer-motion";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 import { Input, Button } from ".";
 import ipfs from "../ipfs";
-import { toast } from "react-toastify";
 import { useAppContext } from "../context/AppContext";
-import { useRouter } from "next/router";
 
 const FILE_SIZE = 10485760;
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
@@ -43,6 +43,8 @@ const initialValues: IFormValues = {
 };
 
 export const UploadPhotoForm = () => {
+  const { selectedAccount } = useAppContext();
+
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { zinx } = useAppContext();
@@ -50,6 +52,14 @@ export const UploadPhotoForm = () => {
   const [file, setFile] = useState<string | null>(null);
 
   const onSubmit = async (values: IFormValues) => {
+    if (!selectedAccount) {
+      toast.error(
+        <p className="dark:text-darkBlue">Please connect your wallet first!</p>
+      );
+
+      return;
+    }
+
     setLoading(true);
 
     let imageBuffer: Uint8Array;
