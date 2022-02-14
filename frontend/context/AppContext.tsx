@@ -87,8 +87,10 @@ const AppContextProvider: React.FC = (props) => {
   };
 
   useEffect(() => {
-    if (!zinx) return;
-    _getAllPhotos(zinx);
+    setInterval(() => {
+      if (!zinx) return;
+      _getAllPhotos(zinx);
+    }, 10000);
   }, [zinx]);
 
   // initialize app
