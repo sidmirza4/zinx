@@ -1,6 +1,12 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useLayoutEffect,
+} from "react";
 import { toast } from "react-toastify";
-import { Contract, ethers, BigNumber } from "ethers";
+import { Contract, ethers } from "ethers";
 
 import contractAddress from "../contracts/contract-address.json";
 import ZinxArtifact from "../contracts/Zinx.json";
@@ -12,6 +18,7 @@ declare global {
 }
 
 interface IAppContext {
+  isMetamaskInstalled: boolean;
   allPhotos: any[];
   zinx: Contract | null;
   connectWallet: () => void;
@@ -23,6 +30,7 @@ interface IAppContext {
 }
 
 const AppContext = createContext<IAppContext>({
+  isMetamaskInstalled: false,
   allPhotos: [],
   zinx: null,
   connectWallet: () => {},
@@ -33,6 +41,7 @@ const AppContext = createContext<IAppContext>({
 });
 
 const AppContextProvider: React.FC = (props) => {
+  const [isMetamaskInstalled, setIsMetamaskInstalled] = useState(false);
   const [allPhotos, setAllPhotos] = useState<any>([]);
   const [zinx, setZinx] = useState<Contract | null>(null);
   const [modals, setModals] = useState({
@@ -45,11 +54,12 @@ const AppContextProvider: React.FC = (props) => {
   // intializing ethers
   const _initializeEthers = async () => {
     const _provider = new ethers.providers.Web3Provider(window.ethereum);
+    const _signer = _provider.getSigner(0);
 
     const _zinx = new ethers.Contract(
       contractAddress.Zinx,
       ZinxArtifact.abi,
-      _provider.getSigner(0)
+      _signer || _provider
     );
 
     setZinx(_zinx);
@@ -85,6 +95,14 @@ const AppContextProvider: React.FC = (props) => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if (window && window.ethereum) {
+      setIsMetamaskInstalled(true);
+    } else {
+      setIsMetamaskInstalled(false);
+    }
+  });
 
   useEffect(() => {
     setInterval(() => {
@@ -152,6 +170,7 @@ const AppContextProvider: React.FC = (props) => {
   };
 
   const value = {
+    isMetamaskInstalled,
     allPhotos,
     zinx,
     connectWallet,
