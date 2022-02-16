@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Container, CardItem, CardSkeleton } from ".";
+import { CardItem, CardSkeleton } from ".";
 import { useAppContext } from "../context/AppContext";
 
 const AllPhotos = () => {

@@ -2,7 +2,7 @@ import Head from "next/head";
 import type { AppProps } from "next/app";
 import { ToastContainer } from "react-toastify";
 
-import { Navbar, NoMetaMaskModal } from "../components";
+import { Navbar } from "../components";
 import AppContextProvider from "../context/AppContext";
 
 import "../styles/globals.css";
@@ -44,7 +44,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         draggable
         pauseOnHover
       ></ToastContainer>
-      <NoMetaMaskModal />
     </AppContextProvider>
   );
 }

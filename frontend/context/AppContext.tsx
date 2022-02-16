@@ -22,7 +22,7 @@ interface IAppContext {
   allPhotos: any[];
   zinx: Contract | null;
   connectWallet: () => void;
-  modals: { noMetaMask: boolean; donateModal: boolean };
+  modals: { donateModal: boolean };
   setModals: any;
   selectedAccount: string | null;
   darkMode?: boolean;
@@ -35,7 +35,7 @@ const AppContext = createContext<IAppContext>({
   zinx: null,
   connectWallet: () => {},
   setModals: () => {},
-  modals: { noMetaMask: false, donateModal: false },
+  modals: { donateModal: false },
   selectedAccount: null,
   toggleDarkMode: () => {},
 });
@@ -59,7 +59,7 @@ const AppContextProvider: React.FC = (props) => {
     const _zinx = new ethers.Contract(
       contractAddress.Zinx,
       ZinxArtifact.abi,
-      _signer || _provider
+      _signer._address ? _signer : _provider
     );
 
     setZinx(_zinx);
@@ -153,8 +153,10 @@ const AppContextProvider: React.FC = (props) => {
 
   // connect wallet function
   const connectWallet = async () => {
-    if (!window.ethereum) {
-      setModals((prev) => ({ ...prev, noMetaMask: true }));
+    if (!isMetamaskInstalled) {
+      toast.error(
+        <p className="dark:text-darkBlue">Please install metamask first!</p>
+      );
       return;
     }
 
