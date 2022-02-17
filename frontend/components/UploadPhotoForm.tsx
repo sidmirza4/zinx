@@ -85,13 +85,20 @@ export const UploadPhotoForm = () => {
         await zinx?.uploadPhoto(content.hash, values.name, values.description);
         setTimeout(() => {
           setLoading(false);
-          toast.success(<p>Photo uploaded successfully</p>);
+          toast.success(
+            <p className="dark:text-darkBlue">Photo uploaded successfully</p>
+          );
           router.replace("/");
         }, 25000);
       } catch (error: any) {
+        console.log(error);
         if (error.code === 4001) {
           toast.error(
             <p className="dark:text-darkBlue">You declined the request!</p>
+          );
+        } else {
+          toast.error(
+            <p className="dark:text-darkBlue">Something went wrong!</p>
           );
         }
         setLoading(false);

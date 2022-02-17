@@ -24,7 +24,7 @@ interface IAppContext {
   connectWallet: () => void;
   modals: { donateModal: boolean };
   setModals: any;
-  selectedAccount: string | null;
+  selectedAccount?: string;
   darkMode?: boolean;
   toggleDarkMode: () => void;
 }
@@ -36,7 +36,7 @@ const AppContext = createContext<IAppContext>({
   connectWallet: () => {},
   setModals: () => {},
   modals: { donateModal: false },
-  selectedAccount: null,
+  selectedAccount: undefined,
   toggleDarkMode: () => {},
 });
 
@@ -48,13 +48,18 @@ const AppContextProvider: React.FC = (props) => {
     noMetaMask: false,
     donateModal: false,
   });
-  const [selectedAccount, setSelectedAccount] = useState<string | null>(null);
+  const [selectedAccount, setSelectedAccount] = useState<string | undefined>(
+    undefined
+  );
   const [darkMode, setDarkMode] = useState<boolean | undefined>(undefined);
 
   // intializing ethers
   const _initializeEthers = async () => {
     const _provider = new ethers.providers.Web3Provider(window.ethereum);
-    const _signer = _provider.getSigner(0);
+    const _signer = _provider.getSigner(selectedAccount);
+
+    console.log(_provider);
+    console.log(_signer);
 
     const _zinx = new ethers.Contract(
       contractAddress.Zinx,
@@ -125,6 +130,11 @@ const AppContextProvider: React.FC = (props) => {
 
     _setTheme();
   }, []);
+
+  // set the signer
+  useEffect(() => {
+    _initializeEthers();
+  }, [selectedAccount]);
 
   // toggling the darkmode
   useEffect(() => {
